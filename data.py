@@ -1,4 +1,5 @@
 import json
+from multiprocessing.spawn import old_main_modules
 import os
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder
@@ -50,9 +51,13 @@ def binary_data(df):
     df["binary_record_annotations"] = df["encoded_record_annotations"].apply(lambda x: 0 if x == 3 else 1)
     return df
 
-df = binary_data(pd.read_csv("data_encoded.csv"))
-df.to_csv("data_encoded_new.csv",index = False)
+#df = binary_data(pd.read_csv("data_encoded.csv"))
+#df.to_csv("data_encoded_new.csv",index = False)
 
+newFiles =  os.listdir("./SPRSound-1.0/json")
+oldFiles = os.listdir("./SPRSound/json")
+if oldFiles == newFiles:
+    print("equal")
 
 """
 Used Code

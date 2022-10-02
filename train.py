@@ -1,9 +1,8 @@
 from model import AudioClassifier, training, inference
 import torch
 import pandas as pd
-from audio import SoundDS
+from workingfiles.audio import SoundDS
 from torch.utils.data import random_split
-
 
 df = pd.read_csv('data_encoded_new.csv')
 data_path = "./SPRSound/wav/"
@@ -29,7 +28,8 @@ myModel = myModel.to(device)
 print(next(myModel.parameters()).device)
 
 
-num_epochs= 100
+num_epochs= 30
 training(myModel, train_dl, num_epochs)
 torch.save(myModel.state_dict(), "./model_state_dict.pt")
 inference(myModel, val_dl)
+

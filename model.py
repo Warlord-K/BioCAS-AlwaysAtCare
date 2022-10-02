@@ -2,7 +2,7 @@ import torch
 from torch import nn
 import torch.nn.functional as F
 from torch.nn import init
-
+import matplotlib.pyplot as plt
 
 
 
@@ -76,21 +76,22 @@ def match(arr1,arr2):
 def training(model, train_dl, num_epochs):
   # Loss Function, Optimizer and Scheduler
   criterion = nn.BCEWithLogitsLoss()
-  optimizer = torch.optim.Adam(model.parameters(),lr=0.00001)
+  optimizer = torch.optim.Adam(model.parameters(),lr=0.0001)
   
-  scheduler = torch.optim.lr_scheduler.OneCycleLR(optimizer, max_lr=0.001,
+  scheduler = torch.optim.lr_scheduler.OneCycleLR(optimizer, max_lr=0.01,
                                                 steps_per_epoch=int(len(train_dl)),
                                                 epochs=num_epochs,
                                                 anneal_strategy='linear')
   
-  
+  accuracy = []
+  losses = []
   
   # Repeat for each epoch
   for epoch in range(num_epochs):
     running_loss = 0.0
     correct_prediction = 0
     total_prediction = 0
-
+    
     # Repeat for each batch in the training set
     for i, data in enumerate(train_dl):
         # Get the input features and target labels, and put them on the GPU
@@ -131,7 +132,21 @@ def training(model, train_dl, num_epochs):
     num_batches = len(train_dl)
     avg_loss = running_loss / num_batches
     acc = correct_prediction/total_prediction
+    accuracy.append(acc)
+    losses.append(avg_loss)
     print(f'Epoch: {epoch}, Loss: {avg_loss:.2f}, Accuracy: {acc:.2f}')
+  
+  plt.plot([i for i in range(1,num_epochs+1)],accuracy)
+  plt.title("Accuracy")
+  plt.xlabel("Epoch")
+  plt.ylabel("Accuracy")
+  plt.show()
+  
+  plt.plot([i for i in range(1,num_epochs+1)],losses)
+  plt.title("Loss")
+  plt.xlabel("Epoch")
+  plt.ylabel("Loss")
+  plt.show()
 
   print('Finished Training')
 

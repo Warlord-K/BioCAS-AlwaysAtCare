@@ -2,7 +2,7 @@ import argparse
 from model import AudioClassifier
 import json
 import torch
-from audio import AudioUtil
+from workingfiles.audio import AudioUtil
 
 def predict(audio_file):
     mymodel = AudioClassifier()

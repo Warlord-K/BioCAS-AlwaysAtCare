@@ -1,0 +1,24 @@
+from audio import SoundDS
+import pandas as pd
+from PIL import Image,ImageOps
+import numpy as np
+df = pd.read_csv('data_encoded_new.csv')
+data_path = "./SPRSound/wav/"
+myds = SoundDS(df, data_path)
+id1 = 2
+
+im = Image.fromarray(myds[id1][0][0].numpy())
+
+if im.mode != 'RGB':
+    im = im.convert('RGB')
+
+filename = f"Images/im{id1}.jpg"
+im.save(filename)
+im1 = ImageOps.grayscale(Image.open(filename))
+
+print(np.array(im1)[0][0])
+print(myds[id1][0][0][0][0])
+if np.array(im1).all == np.array(myds[id1][0][0]).all:
+    print(np.array(im1).shape)
+
+
